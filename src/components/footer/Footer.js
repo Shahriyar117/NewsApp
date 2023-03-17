@@ -11,6 +11,8 @@ const Footer = () => {
         padding: "12px",
         backgroundColor: "black",
         marginTop: "auto",
+        position: "absoulte",
+        width: "100%",
       }}
     >
       <Container fixed maxWidth={false} sx={{ textAlign: "center" }}>
@@ -57,9 +59,6 @@ const Footer = () => {
               {page.name}
             </Link>
           ))}
-          <Link key="login" to="/login" className="menulinksfooter">
-            Login
-          </Link>
         </Box>
 
         <Box className="MobileFooterContent" sx={{ textAlign: "center" }}>

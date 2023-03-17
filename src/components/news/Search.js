@@ -1,6 +1,6 @@
-import { Search } from "@mui/icons-material";
-import { Box, InputAdornment, TextField } from "@mui/material";
 import React from "react";
+import { Search } from "@mui/icons-material";
+import { InputAdornment, TextField } from "@mui/material";
 
 const SearchBox = ({ handleSearchChange }) => {
   return (

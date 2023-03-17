@@ -100,7 +100,7 @@ const Categories = () => {
           }}
         >
           {categories.map((item) => (
-            <Paper elevation={24}>
+            <Paper elevation={24} key={item.name}>
               <ImageListItem
                 key={item.image}
                 sx={{ height: "100% !important" }}

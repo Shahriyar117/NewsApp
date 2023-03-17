@@ -1,6 +1,6 @@
-import { Box, imageListItemClasses, Typography } from "@mui/material";
 import React from "react";
 import NewsCard from "../news/NewsCard";
+import { Box, imageListItemClasses, Typography } from "@mui/material";
 
 const TopNews = ({ topNews, about }) => {
   return (

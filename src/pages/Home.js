@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Stack, Box, CircularProgress } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import axios from "axios";
 import TopNews from "../components/home/TopNews";
+import { Stack, Box, CircularProgress } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const Home = () => {
   const classes = useStyles();

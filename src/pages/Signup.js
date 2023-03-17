@@ -1,25 +1,29 @@
-import * as React from "react";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Paper } from "@mui/material";
+import { Link } from "react-router-dom";
+import { thunkSignUp } from "../redux/actions";
+import { connect } from "react-redux";
 
-export default function SignUp() {
+const SignUp = ({ registerUser }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const userRegister = {
+      name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+    console.log(userRegister);
+    registerUser({ ...userRegister, from: "handleSubmit-SignUp" });
   };
 
   return (
@@ -51,25 +55,15 @@ export default function SignUp() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
+                name="name"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                id="name"
+                label="name"
                 autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
               />
             </Grid>
             <Grid item xs={12}>
@@ -133,4 +127,15 @@ export default function SignUp() {
       </Box>
     </Container>
   );
-}
+};
+
+const msp = ({ auth }) => ({
+  user: auth.user,
+});
+
+const mdp = (dispatch) => ({
+  registerUser: (name, email, password, from) =>
+    dispatch(thunkSignUp(name, email, password, from)),
+});
+
+export default connect(msp, mdp)(SignUp);

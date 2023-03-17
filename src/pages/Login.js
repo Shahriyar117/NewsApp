@@ -1,22 +1,25 @@
-import * as React from "react";
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { thunkLogin } from "../redux/actions";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-export default function Login() {
+const Login = ({ loginUser, user }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const userLogin = {
       email: data.get("email"),
       password: data.get("password"),
-    });
+    };
+    loginUser({ ...userLogin, from: "handleSubmit-Login" });
   };
 
   return (
@@ -117,4 +120,14 @@ export default function Login() {
       </Box>
     </Container>
   );
-}
+};
+const msp = ({ auth }) => ({
+  user: auth.user,
+});
+
+const mdp = (dispatch) => ({
+  loginUser: (email, password, from) =>
+    dispatch(thunkLogin(email, password, from)),
+});
+
+export default connect(msp, mdp)(Login);

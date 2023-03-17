@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NavDrawer from "./Drawer";
 import { Menu } from "@mui/icons-material";
 import {
   Stack,
@@ -11,12 +12,18 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
-import NavDrawer from "./Drawer";
 import { navItems } from "./NavItemsData";
+import { connect } from "react-redux";
+import { logout } from "../../redux/actions";
 
-const NavBar = () => {
+const NavBar = ({ user, logoutUser }) => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logoutUser();
+  };
 
   const handleDrawerToggle = (e) => {
     e.preventDefault();
@@ -56,7 +63,7 @@ const NavBar = () => {
               },
             }}
           >
-            <Grid item xs={12} sm={12} md={12} lg={6} xl={6}>
+            <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
               <Box
                 component={Link}
                 to="/"
@@ -71,38 +78,42 @@ const NavBar = () => {
                 News App
               </Box>
             </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={6}
-              xl={6}
-              spacing={4}
-              sx={{
-                mt: 4,
-                display: {
-                  xs: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: "inline",
-                  xl: "inline",
-                },
-              }}
-            >
-              {navItems.map((item) => (
-                <Button
-                  component={Link}
-                  to={item.path}
-                  disableRipple
-                  className={classes.links}
-                  sx={{ color: "black" }}
-                >
-                  {item.name}
-                </Button>
-              ))}
-            </Grid>
+            {user ? (
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={12}
+                lg={7}
+                xl={7}
+                spacing={4}
+                sx={{
+                  mt: 4,
+                  display: {
+                    xs: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "inline",
+                    xl: "inline",
+                  },
+                }}
+              >
+                {navItems.map((item) => (
+                  <Button
+                    key={item.name}
+                    component={Link}
+                    to={item.path}
+                    disableRipple
+                    className={classes.links}
+                    sx={{ color: "black" }}
+                  >
+                    {item.name}
+                  </Button>
+                ))}
+              </Grid>
+            ) : (
+              ""
+            )}
           </Grid>
           <Box
             sx={{
@@ -139,56 +150,92 @@ const NavBar = () => {
               display: "flex",
             }}
           >
-            <Box
-              sx={{
-                ml: 1,
-                display: {
-                  xs: "none",
-                  sm: "none",
-                  md: "none",
-                  lg: "flex",
-                  xl: "flex",
-                },
-              }}
-            >
-              <Button
-                component={Link}
-                disableRipple
+            {user ? (
+              <Box
                 sx={{
-                  color: "black",
-                  width: "100px",
-                  height: "40px",
-                  borderColor: "black",
-                  "&:hover": { backgroundColor: "#FEC20C" },
-                }}
-                variant="outlined"
-                to="/login"
-              >
-                Login
-              </Button>
-              <Button
-                component={Link}
-                to="/signup"
-                disableRipple
-                sx={{
-                  color: "white",
                   ml: 1,
-                  width: "100px",
-                  height: "40px",
-                  backgroundColor: "black",
-                  "&:hover": { backgroundColor: "#FEC20C" },
+                  p: 1,
+                  display: {
+                    xs: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "flex",
+                    xl: "flex",
+                  },
                 }}
-                variant="contained"
               >
-                Sign Up
-              </Button>
-            </Box>
+                <Button
+                  component={Link}
+                  onClick={handleLogout}
+                  disableRipple
+                  sx={{
+                    color: "white",
+                    ml: 1,
+                    width: "100px",
+                    height: "40px",
+                    backgroundColor: "black",
+                    "&:hover": { backgroundColor: "#FEC20C" },
+                  }}
+                  variant="outlined"
+                  to="/login"
+                >
+                  Logout
+                </Button>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  ml: 1,
+                  py: 1,
+                  display: {
+                    xs: "none",
+                    sm: "none",
+                    md: "none",
+                    lg: "flex",
+                    xl: "flex",
+                  },
+                }}
+              >
+                <Button
+                  component={Link}
+                  disableRipple
+                  sx={{
+                    color: "black",
+                    width: "100px",
+                    height: "40px",
+                    borderColor: "black",
+                    "&:hover": { backgroundColor: "#FEC20C" },
+                  }}
+                  variant="outlined"
+                  to="/login"
+                >
+                  Login
+                </Button>
+                <Button
+                  component={Link}
+                  to="/signup"
+                  disableRipple
+                  sx={{
+                    color: "white",
+                    ml: 1,
+                    width: "100px",
+                    height: "40px",
+                    backgroundColor: "black",
+                    "&:hover": { backgroundColor: "#FEC20C" },
+                  }}
+                  variant="contained"
+                >
+                  Sign Up
+                </Button>
+              </Box>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
       <NavDrawer
         handleDrawerToggle={handleDrawerToggle}
         mobileOpen={mobileOpen}
+        handleLogout={handleLogout}
       />
     </Stack>
   );
@@ -234,4 +281,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default NavBar;
+const msp = ({ auth }) => ({ user: auth.user });
+const mdp = (dispatch) => ({
+  logoutUser: () => dispatch(logout()),
+});
+export default connect(msp, mdp)(NavBar);

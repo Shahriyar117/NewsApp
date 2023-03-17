@@ -35,11 +35,18 @@ const NewsCard = ({ item }) => {
             loading="lazy"
           />
           <Box display="flex" flexDirection="column" sx={{ mt: 1 }}>
-            <Typography sx={{ mt: 2, fontSize: "14px", color: "#FEC20C" }}>
+            <Typography
+              sx={{
+                mt: 2,
+                fontSize: "14px",
+                color: "white",
+                fontWeight: "bold",
+              }}
+            >
               {item.title}
             </Typography>
             <Box display="flex" flexDirection="row" justifyContent="left">
-              <Typography sx={{ mt: 2, fontSize: "14px" }}>
+              <Typography sx={{ mt: 1, fontSize: "14px" }}>
                 {item.description && item.description.length > 20
                   ? item.description.substring(0, 40)
                   : item.description}
