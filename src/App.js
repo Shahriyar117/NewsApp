@@ -1,32 +1,70 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import Footer from "./components/footer/Footer";
 import NavBar from "./components/navbars/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import RenderNews from "./pages/RenderNews";
-import NewsDetail from "./pages/NewsDetail";
 import SignUp from "./pages/Signup";
 import Categories from "./pages/category/Categories";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { connect } from "react-redux";
+import Footer from "./components/footer/Footer";
 
-function App() {
+const App = ({ user }) => {
   return (
     <>
       <NavBar />
       <Routes>
         <Route index path="/" element={<Home />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/news/:id" element={<NewsDetail />} />
+        <Route
+          path="/signup"
+          element={user ? <Navigate to="/" /> : <SignUp />}
+        />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/categories">
-          <Route path="" element={<Categories />}></Route>
-          <Route path=":name" element={<RenderNews />}></Route>
+          <Route
+            path=""
+            element={
+              <ProtectedRoute>
+                <Categories />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path=":name"
+            element={
+              <ProtectedRoute>
+                <RenderNews />
+              </ProtectedRoute>
+            }
+          ></Route>
         </Route>
-        <Route path="/news" element={<RenderNews />} />
+        <Route
+          path="/news"
+          element={
+            <ProtectedRoute>
+              <RenderNews />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      <Footer />
+      {user && <Footer />}
     </>
   );
-}
+};
+const msp = ({ auth }) => ({
+  user: auth.user,
+});
+const mdp = (dispatch) => ({});
 
-export default App;
+export default connect(msp, mdp)(App);
+
+// function withRouter(Component) {
+// 	function ComponentWithRouterProp(props) {
+// 		let location = useLocation();
+// 		let navigate = useNavigate();
+// 		let params = useParams();
+// 		return <Component {...props} router={{ location, navigate, params }} />;
+// 	}
+
+// 	return ComponentWithRouterProp;
+// }

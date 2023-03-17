@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
+import NewsCard from "../components/news/NewsCard";
+import SearchBox from "../components/news/Search";
 import {
   Stack,
   Typography,
@@ -10,9 +13,6 @@ import {
   MenuItem,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import NewsCard from "../components/news/NewsCard";
-import axios from "axios";
-import SearchBox from "../components/news/Search";
 import { useParams } from "react-router-dom";
 
 const RenderNews = () => {
