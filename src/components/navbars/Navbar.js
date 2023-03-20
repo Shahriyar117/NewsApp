@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import NavDrawer from "./Drawer";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import SettingsDialog from "../settings/Settings";
 import { Menu } from "@mui/icons-material";
 import {
   Stack,
@@ -31,39 +33,109 @@ const NavBar = ({ user, logoutUser }) => {
   };
 
   return (
-    <Stack
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <AppBar component="nav" position="sticky" style={{ background: "#ffff" }}>
-        <Toolbar direction="row">
-          <IconButton
-            color="black"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ display: { xs: "flex", sm: "flex", md: "flex", lg: "none" } }}
-          >
-            <Menu />
-          </IconButton>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{
-              display: {
-                xs: "none",
-                sm: "none",
-                md: "none",
-                lg: "flex",
-              },
-            }}
-          >
-            <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
+    <>
+      <Stack
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <AppBar
+          component="nav"
+          position="sticky"
+          style={{ background: "#ffff" }}
+        >
+          <Toolbar direction="row">
+            <IconButton
+              color="black"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{
+                display: { xs: "flex", sm: "flex", md: "flex", lg: "none" },
+              }}
+            >
+              <Menu />
+            </IconButton>
+            <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              sx={{
+                display: {
+                  xs: "none",
+                  sm: "none",
+                  md: "none",
+                  lg: "flex",
+                },
+              }}
+            >
+              <Grid item xs={12} sm={12} md={12} lg={5} xl={5}>
+                <Box
+                  component={Link}
+                  to="/"
+                  sx={{
+                    fontSize: "30px",
+                    fontWeight: "bold",
+                    textDecoration: "none",
+                    color: "black",
+                    "&:hover": { color: "#FEC20C" },
+                  }}
+                >
+                  News App
+                </Box>
+              </Grid>
+              {user ? (
+                <Grid
+                  item
+                  xs={12}
+                  sm={12}
+                  md={12}
+                  lg={7}
+                  xl={7}
+                  spacing={4}
+                  sx={{
+                    mt: 4,
+                    display: {
+                      xs: "none",
+                      sm: "none",
+                      md: "none",
+                      lg: "inline",
+                      xl: "inline",
+                    },
+                  }}
+                >
+                  {navItems.map((item) => (
+                    <Button
+                      key={item.name}
+                      component={Link}
+                      to={item.path}
+                      disableRipple
+                      className={classes.links}
+                      sx={{ color: "black" }}
+                    >
+                      {item.name}
+                    </Button>
+                  ))}
+                </Grid>
+              ) : (
+                ""
+              )}
+            </Grid>
+            <Box
+              sx={{
+                margin: "auto",
+                display: {
+                  xs: "flex",
+                  sm: "flex",
+                  md: "flex",
+                  lg: "none",
+                  xl: "none",
+                },
+              }}
+            >
               <Box
                 component={Link}
                 to="/"
@@ -77,167 +149,105 @@ const NavBar = ({ user, logoutUser }) => {
               >
                 News App
               </Box>
-            </Grid>
-            {user ? (
-              <Grid
-                item
-                xs={12}
-                sm={12}
-                md={12}
-                lg={7}
-                xl={7}
-                spacing={4}
-                sx={{
-                  mt: 4,
-                  display: {
-                    xs: "none",
-                    sm: "none",
-                    md: "none",
-                    lg: "inline",
-                    xl: "inline",
-                  },
-                }}
-              >
-                {navItems.map((item) => (
-                  <Button
-                    key={item.name}
-                    component={Link}
-                    to={item.path}
-                    disableRipple
-                    className={classes.links}
-                    sx={{ color: "black" }}
-                  >
-                    {item.name}
-                  </Button>
-                ))}
-              </Grid>
-            ) : (
-              ""
-            )}
-          </Grid>
-          <Box
-            sx={{
-              margin: "auto",
-              display: {
-                xs: "flex",
-                sm: "flex",
-                md: "flex",
-                lg: "none",
-                xl: "none",
-              },
-            }}
-          >
+            </Box>
+
             <Box
-              component={Link}
-              to="/"
               sx={{
-                fontSize: "30px",
-                fontWeight: "bold",
-                textDecoration: "none",
-                color: "black",
-                "&:hover": { color: "#FEC20C" },
+                ml: 1,
+                mb: { xs: 0.8, sm: 0.8, md: 0.8, lg: 0 },
+                mt: { lg: 3.2 },
+                display: "flex",
               }}
             >
-              News App
+              {user ? (
+                <Box
+                  sx={{
+                    ml: 1,
+                    p: 1,
+                    display: {
+                      xs: "none",
+                      sm: "none",
+                      md: "none",
+                      lg: "flex",
+                      xl: "flex",
+                    },
+                  }}
+                >
+                  <Button
+                    component={Link}
+                    onClick={handleLogout}
+                    disableRipple
+                    sx={{
+                      color: "white",
+                      ml: 1,
+                      width: "100px",
+                      height: "40px",
+                      backgroundColor: "black",
+                      "&:hover": { backgroundColor: "#FEC20C" },
+                    }}
+                    variant="outlined"
+                    to="/login"
+                  >
+                    Logout
+                  </Button>
+                </Box>
+              ) : (
+                <Box
+                  sx={{
+                    ml: 1,
+                    py: 1,
+                    display: {
+                      xs: "none",
+                      sm: "none",
+                      md: "none",
+                      lg: "flex",
+                      xl: "flex",
+                    },
+                  }}
+                >
+                  <Button
+                    component={Link}
+                    disableRipple
+                    sx={{
+                      color: "black",
+                      width: "100px",
+                      height: "40px",
+                      borderColor: "black",
+                      "&:hover": { backgroundColor: "#FEC20C" },
+                    }}
+                    variant="outlined"
+                    to="/login"
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    component={Link}
+                    to="/signup"
+                    disableRipple
+                    sx={{
+                      color: "white",
+                      ml: 1,
+                      width: "100px",
+                      height: "40px",
+                      backgroundColor: "black",
+                      "&:hover": { backgroundColor: "#FEC20C" },
+                    }}
+                    variant="contained"
+                  >
+                    Sign Up
+                  </Button>
+                </Box>
+              )}
             </Box>
-          </Box>
-
-          <Box
-            sx={{
-              ml: 1,
-              mb: { xs: 0.8, sm: 0.8, md: 0.8, lg: 0 },
-              mt: { lg: 3.2 },
-              display: "flex",
-            }}
-          >
-            {user ? (
-              <Box
-                sx={{
-                  ml: 1,
-                  p: 1,
-                  display: {
-                    xs: "none",
-                    sm: "none",
-                    md: "none",
-                    lg: "flex",
-                    xl: "flex",
-                  },
-                }}
-              >
-                <Button
-                  component={Link}
-                  onClick={handleLogout}
-                  disableRipple
-                  sx={{
-                    color: "white",
-                    ml: 1,
-                    width: "100px",
-                    height: "40px",
-                    backgroundColor: "black",
-                    "&:hover": { backgroundColor: "#FEC20C" },
-                  }}
-                  variant="outlined"
-                  to="/login"
-                >
-                  Logout
-                </Button>
-              </Box>
-            ) : (
-              <Box
-                sx={{
-                  ml: 1,
-                  py: 1,
-                  display: {
-                    xs: "none",
-                    sm: "none",
-                    md: "none",
-                    lg: "flex",
-                    xl: "flex",
-                  },
-                }}
-              >
-                <Button
-                  component={Link}
-                  disableRipple
-                  sx={{
-                    color: "black",
-                    width: "100px",
-                    height: "40px",
-                    borderColor: "black",
-                    "&:hover": { backgroundColor: "#FEC20C" },
-                  }}
-                  variant="outlined"
-                  to="/login"
-                >
-                  Login
-                </Button>
-                <Button
-                  component={Link}
-                  to="/signup"
-                  disableRipple
-                  sx={{
-                    color: "white",
-                    ml: 1,
-                    width: "100px",
-                    height: "40px",
-                    backgroundColor: "black",
-                    "&:hover": { backgroundColor: "#FEC20C" },
-                  }}
-                  variant="contained"
-                >
-                  Sign Up
-                </Button>
-              </Box>
-            )}
-          </Box>
-        </Toolbar>
-      </AppBar>
-      <NavDrawer
-        handleDrawerToggle={handleDrawerToggle}
-        mobileOpen={mobileOpen}
-        handleLogout={handleLogout}
-      />
-    </Stack>
+          </Toolbar>
+        </AppBar>
+        <NavDrawer
+          handleDrawerToggle={handleDrawerToggle}
+          mobileOpen={mobileOpen}
+          handleLogout={handleLogout}
+        />
+      </Stack>
+    </>
   );
 };
 
@@ -285,4 +295,5 @@ const msp = ({ auth }) => ({ user: auth.user });
 const mdp = (dispatch) => ({
   logoutUser: () => dispatch(logout()),
 });
+
 export default connect(msp, mdp)(NavBar);

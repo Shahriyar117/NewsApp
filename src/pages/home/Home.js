@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import TopNews from "../components/home/TopNews";
+import TopNews from "../../components/home/TopNews";
 import { Stack, Box, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 

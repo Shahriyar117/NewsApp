@@ -1,13 +1,16 @@
 import NavBar from "./components/navbars/Navbar";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import RenderNews from "./pages/RenderNews";
-import SignUp from "./pages/Signup";
+import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import AllNews from "./pages/allnews/AllNews";
+import SignUp from "./pages/signup/Signup";
 import Categories from "./pages/category/Categories";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import UserFooter from "./components/footer/UserFooter";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
 import Footer from "./components/footer/Footer";
+import TopHeadlines from "./pages/topheadlines/TopHeadlines";
+import TheNews from "./pages/thenews/TheNews";
 
 const App = ({ user }) => {
   return (
@@ -30,10 +33,10 @@ const App = ({ user }) => {
             }
           ></Route>
           <Route
-            path=":name"
+            path=":category"
             element={
               <ProtectedRoute>
-                <RenderNews />
+                <AllNews />
               </ProtectedRoute>
             }
           ></Route>
@@ -42,12 +45,20 @@ const App = ({ user }) => {
           path="/news"
           element={
             <ProtectedRoute>
-              <RenderNews />
+              <TheNews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/topNews"
+          element={
+            <ProtectedRoute>
+              <TopHeadlines />
             </ProtectedRoute>
           }
         />
       </Routes>
-      {user && <Footer />}
+      {user ? <UserFooter /> : <Footer />}
     </>
   );
 };
