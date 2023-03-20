@@ -10,7 +10,7 @@ import rootReducer from "./reducers/root.reducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth", "preference"],
+  whitelist: ["auth"],
 };
 const logger = createLogger({ collapsed: true });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

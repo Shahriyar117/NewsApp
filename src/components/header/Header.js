@@ -19,6 +19,7 @@ const Header = ({ title }) => {
           fontWeight: 900,
           textAlign: { xs: "center", sm: "left" },
           color: "white",
+          fontSize: { xs: "26px", md: "40px" },
         }}
       >
         {title}

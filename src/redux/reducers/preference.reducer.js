@@ -1,7 +1,7 @@
-import { SET_PREFERENCES } from "../actions";
+import { SET_PREFERENCES, SET_CATEGORY } from "../actions";
 
 const preState = {
-  category: "all",
+  category: "",
   country: null,
   language: null,
 };
@@ -13,6 +13,8 @@ const preferenceReducer = (state = preState, action) => {
   switch (type) {
     case SET_PREFERENCES:
       return { ...stateDup, category, country, language };
+    case SET_CATEGORY:
+      return { ...stateDup, category };
 
     default:
       return state;

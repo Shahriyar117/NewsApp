@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import NavDrawer from "./Drawer";
-import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
-import SettingsDialog from "../settings/Settings";
 import { Menu } from "@mui/icons-material";
 import {
   Stack,
@@ -80,11 +78,16 @@ const NavBar = ({ user, logoutUser }) => {
                     fontSize: "30px",
                     fontWeight: "bold",
                     textDecoration: "none",
+                    mt: 14,
                     color: "black",
                     "&:hover": { color: "#FEC20C" },
                   }}
                 >
-                  News App
+                  <img
+                    style={{ width: 150 }}
+                    alt="News logo"
+                    src={`${window.location.origin}/newsLogo.png`}
+                  />
                 </Box>
               </Grid>
               {user ? (
@@ -147,7 +150,11 @@ const NavBar = ({ user, logoutUser }) => {
                   "&:hover": { color: "#FEC20C" },
                 }}
               >
-                News App
+                <img
+                  style={{ width: 120 }}
+                  alt="News logo"
+                  src={`${window.location.origin}/newsLogo.png`}
+                />
               </Box>
             </Box>
 

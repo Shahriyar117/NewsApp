@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "../../components/header/Header";
 import {
   Stack,
   Box,
@@ -11,9 +12,10 @@ import {
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import "./Categories.css";
-import Header from "../../components/header/Header";
+import { setCategory } from "../../redux/actions";
+import { connect } from "react-redux";
 
-const Categories = () => {
+const Categories = ({ setCategory }) => {
   const categories = [
     {
       name: "business",
@@ -39,6 +41,14 @@ const Categories = () => {
     },
   ];
   const classes = useStyles();
+  const handleCategoryClick = (event) => {
+    const categoryName = event.currentTarget.getAttribute("data-button-key");
+    setCategory({
+      category: categoryName,
+      from: "Categories-handleClickCategory",
+    });
+    console.log();
+  };
   return (
     <>
       <Header title="Categories" />
@@ -53,14 +63,6 @@ const Categories = () => {
           },
         }}
       >
-        {/* <Grid
-          display="flex"
-          justifyContent="flex-start"
-          alignItems="center"
-          sx={{ mb: 2 }}
-        >
-          <SearchBox handleSearchChange={handleSearchChange} />
-        </Grid> */}
         <Box
           sx={{
             backgroundColor: "transparent",
@@ -98,7 +100,9 @@ const Categories = () => {
                     <div className="button">
                       <Button
                         component={Link}
-                        to={`/categories/${item.name}`}
+                        to={`/topnews`}
+                        data-button-key={item.name}
+                        onClick={handleCategoryClick}
                         size="large"
                         variant="outlined"
                         sx={{
@@ -135,4 +139,11 @@ const useStyles = makeStyles({
     backgroundColor: "#ebecf0",
   },
 });
-export default Categories;
+
+const msp = ({}) => ({});
+
+const mdp = (dispatch) => ({
+  setCategory: (category, from) => dispatch(setCategory(category, from)),
+});
+
+export default connect(msp, mdp)(Categories);

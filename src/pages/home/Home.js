@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import TopNews from "../../components/home/TopNews";
+import SettingsDialog from "../../components/settings/Settings";
 import { Stack, Box, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
@@ -27,41 +28,44 @@ const Home = () => {
   }, []);
 
   return (
-    <Stack
-      className={classes.mediaContainer}
-      sx={{
-        padding: {
-          xs: "24px 14px 24px 14px",
-          sm: "44px 14px 44px 14px",
-          md: "44px 44px 44px 44px",
-          lg: "44px 104px 44px 104px",
-        },
-      }}
-    >
-      {isLoading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "#FEC20C",
-          }}
-        >
-          <CircularProgress color="inherit" />
-        </Box>
-      ) : (
-        <>
-          <TopNews
-            topNews={topNewsCountry}
-            about={process.env.REACT_APP_TOP_NEWS_COUNTRY}
-          />
-          <TopNews
-            topNews={topNewsSource}
-            about={process.env.REACT_APP_TOP_NEWS_SOURCE}
-          />
-        </>
-      )}
-    </Stack>
+    <>
+      <SettingsDialog />
+      <Stack
+        className={classes.mediaContainer}
+        sx={{
+          padding: {
+            xs: "24px 14px 24px 14px",
+            sm: "44px 14px 44px 14px",
+            md: "44px 44px 44px 44px",
+            lg: "44px 104px 44px 104px",
+          },
+        }}
+      >
+        {isLoading ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              color: "#FEC20C",
+            }}
+          >
+            <CircularProgress color="inherit" />
+          </Box>
+        ) : (
+          <>
+            <TopNews
+              topNews={topNewsCountry}
+              about={process.env.REACT_APP_TOP_NEWS_COUNTRY}
+            />
+            <TopNews
+              topNews={topNewsSource}
+              about={process.env.REACT_APP_TOP_NEWS_SOURCE}
+            />
+          </>
+        )}
+      </Stack>
+    </>
   );
 };
 

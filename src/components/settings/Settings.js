@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
+import DropDown from "./DropDown";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import DropDownCheckbox from "./DropDownCheckbox";
-import { Box, Grid, Slide, TextField } from "@mui/material";
+import { Box, Grid, Slide } from "@mui/material";
 import { connect } from "react-redux";
-import { setPreferences } from "../../redux/actions";
-import DropDown from "./DropDown";
+import { setModalClose, setPreferences } from "../../redux/actions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -17,29 +16,29 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const categoriesData = [
   {
     id: 1,
-    name: "business",
+    name: "Business",
     value: "business",
   },
   {
     id: 2,
-    name: "entertainment",
+    name: "Entertainment",
     value: "entertainment",
   },
   {
     id: 3,
-    name: "general",
+    name: "General",
     value: "general",
   },
-  { name: "health", value: "health" },
+  { name: "Health", value: "health" },
   {
     id: 4,
-    name: "science",
+    name: "Science",
     value: "science",
   },
-  { id: 5, name: "sports", value: "sports" },
+  { id: 5, name: "Sports", value: "sports" },
   {
     id: 6,
-    name: "technology",
+    name: "Technology",
     value: "technology",
   },
 ];
@@ -80,10 +79,10 @@ const languageData = [
 ];
 const SettingsDialog = ({
   setPreference,
-  handleClose,
   open,
   country,
   language,
+  setModalClose,
 }) => {
   const [sources, setSources] = useState([]);
   const [countrySelected, setCountrySelected] = useState(country);
@@ -92,6 +91,9 @@ const SettingsDialog = ({
 
   const handleSetSources = (value) => {
     setSources(value);
+  };
+  const handleCloseModal = () => {
+    setModalClose();
   };
   const handleSetCountry = (value) => {
     setCountrySelected(value);
@@ -113,14 +115,14 @@ const SettingsDialog = ({
     };
     console.log(userPreferences);
     setPreference(userPreferences);
-    handleClose();
+    handleCloseModal();
   };
   return (
     <Dialog
       open={open}
       TransitionComponent={Transition}
       keepMounted
-      onClose={handleClose}
+      onClose={handleCloseModal}
       aria-describedby="Preference"
       fullWidth
       maxWidth="xs"
@@ -168,7 +170,7 @@ const SettingsDialog = ({
             cursor: "pointer",
             "&:hover": { backgroundColor: "#FEC20C" },
           }}
-          onClick={handleClose}
+          onClick={handleCloseModal}
         >
           Close
         </Button>
@@ -187,14 +189,16 @@ const SettingsDialog = ({
     </Dialog>
   );
 };
-const msp = ({ preference }) => ({
+const msp = ({ preference, modal }) => ({
   category: preference.category,
   country: preference.country,
   language: preference.language,
+  open: modal.open,
 });
 const mdp = (dispatch) => ({
   setPreference: (category, country, language) =>
     dispatch(setPreferences(category, country, language)),
+  setModalClose: () => dispatch(setModalClose()),
 });
 
 export default connect(msp, mdp)(SettingsDialog);
