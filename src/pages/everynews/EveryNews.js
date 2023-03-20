@@ -29,7 +29,7 @@ const sourcesData = [
   },
 ];
 
-const TheNews = ({ country, language, category }) => {
+const EveryNews = ({ country, language, category }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -67,7 +67,7 @@ const TheNews = ({ country, language, category }) => {
 
   return (
     <>
-      <Header title={"News"} />
+      <Header title={"Everything News"} />
       <Stack
         className={classes.mediaContainer}
         sx={{
@@ -143,4 +143,4 @@ const useStyles = makeStyles({
 const msp = ({}) => ({});
 const mdp = (dispatch) => ({});
 
-export default connect(msp, mdp)(TheNews);
+export default connect(msp, mdp)(EveryNews);

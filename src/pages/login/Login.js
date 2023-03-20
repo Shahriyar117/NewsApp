@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -7,12 +7,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { thunkLogin } from "../../redux/actions";
+import { setModalOpen, thunkLogin } from "../../redux/actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Paper } from "@mui/material";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-const Login = ({ loginUser, user }) => {
+const Login = ({ loginUser, setModalOpen }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,6 +26,7 @@ const Login = ({ loginUser, user }) => {
       password: data.get("password"),
     };
     loginUser({ ...userLogin, from: "handleSubmit-Login" });
+    setModalOpen();
   };
 
   return (
@@ -51,18 +57,14 @@ const Login = ({ loginUser, user }) => {
           <Typography component="h1" variant="h5" fontWeight={"bold"}>
             Login
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
                   id="email"
+                  type="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -74,9 +76,22 @@ const Login = ({ loginUser, user }) => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="new-password"
+                  inputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
@@ -129,13 +144,12 @@ const Login = ({ loginUser, user }) => {
     </>
   );
 };
-const msp = ({ auth }) => ({
-  user: auth.user,
-});
+const msp = () => ({});
 
 const mdp = (dispatch) => ({
   loginUser: (email, password, from) =>
     dispatch(thunkLogin(email, password, from)),
+  setModalOpen: () => dispatch(setModalOpen()),
 });
 
 export default connect(msp, mdp)(Login);

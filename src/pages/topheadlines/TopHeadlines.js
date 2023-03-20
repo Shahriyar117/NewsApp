@@ -27,15 +27,6 @@ const TopHeadlines = ({ country, language, category }) => {
   const [sources, setSources] = useState([]);
   const [search, setSearch] = useState("all");
   const [pageSize, setPageSize] = useState(20);
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -93,7 +84,7 @@ const TopHeadlines = ({ country, language, category }) => {
 
   return (
     <>
-      <SettingsDialog open={open} handleClose={handleClose} />
+      <SettingsDialog />
       <Stack
         className={classes.mediaContainer}
         sx={{
@@ -151,7 +142,6 @@ const TopHeadlines = ({ country, language, category }) => {
                 sources={sources}
                 handleToggleSearch={handleToggleSearch}
                 searchByData={searchBy}
-                handleClickOpen={handleClickOpen}
                 handleSetSources={handleSetSources}
               />
             </Paper>
@@ -208,7 +198,6 @@ const TopHeadlines = ({ country, language, category }) => {
                     sources={sources}
                     handleToggleSearch={handleToggleSearch}
                     searchByData={searchBy}
-                    handleClickOpen={handleClickOpen}
                     handleSetSources={handleSetSources}
                   />
                 </AccordionDetails>
@@ -234,7 +223,7 @@ const TopHeadlines = ({ country, language, category }) => {
                   color: "white",
                 }}
               >
-                {category ? `${category} News` : "news"}
+                {category ? `${category} news` : "news"}
               </Typography>
             </Box>
 

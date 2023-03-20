@@ -1,9 +1,11 @@
-import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
 import SearchBox from "../news/Search";
 import DropDownCheckbox from "../settings/DropDownCheckbox";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
+import { Box, Button, MenuItem, Select, Typography } from "@mui/material";
 import "./TopHeadlineFilter.css";
+import { setModalOpen } from "../../redux/actions";
+import { connect } from "react-redux";
 
 const TopHeadlineFilter = ({
   toggleSearch,
@@ -15,9 +17,12 @@ const TopHeadlineFilter = ({
   sources,
   handleToggleSearch,
   searchByData,
-  handleClickOpen,
   handleSetSources,
+  setModalOpen,
 }) => {
+  const handleClickOpen = () => {
+    setModalOpen();
+  };
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center", pt: 1, mb: 1 }}>
@@ -163,7 +168,6 @@ const TopHeadlineFilter = ({
             }}
           >
             <SettingsSuggestIcon
-              onClick={handleClickOpen}
               sx={{
                 width: { xs: "30px", md: "50px" },
                 fontSize: { xs: "12px", md: "12px" },
@@ -180,4 +184,9 @@ const TopHeadlineFilter = ({
   );
 };
 
-export default TopHeadlineFilter;
+const msp = ({ preference }) => ({});
+const mdp = (dispatch) => ({
+  setModalOpen: () => dispatch(setModalOpen()),
+});
+
+export default connect(msp, mdp)(TopHeadlineFilter);

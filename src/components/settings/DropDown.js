@@ -1,3 +1,4 @@
+import React from "react";
 import {
   FormControl,
   InputLabel,
@@ -5,7 +6,6 @@ import {
   OutlinedInput,
   Select,
 } from "@mui/material";
-import React from "react";
 
 const DropDown = ({ title, selected, handleSelected, data }) => {
   const handleChange = (event) => {
@@ -19,7 +19,7 @@ const DropDown = ({ title, selected, handleSelected, data }) => {
         labelId="country-checkbox-label"
         input={<OutlinedInput label={title} />}
         value={selected}
-        size="small"
+        size="medium"
         onChange={handleChange}
       >
         {data.map((list) => (

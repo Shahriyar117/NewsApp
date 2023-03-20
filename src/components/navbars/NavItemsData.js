@@ -15,12 +15,4 @@ export const navItems = [
     name: "All News",
     path: "/news",
   },
-  {
-    name: "About Us",
-    path: "/about",
-  },
-  {
-    name: "Contact",
-    path: "/contact",
-  },
 ];

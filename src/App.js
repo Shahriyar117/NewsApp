@@ -1,16 +1,15 @@
 import NavBar from "./components/navbars/Navbar";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
-import AllNews from "./pages/allnews/AllNews";
 import SignUp from "./pages/signup/Signup";
 import Categories from "./pages/category/Categories";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import UserFooter from "./components/footer/UserFooter";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { connect } from "react-redux";
 import Footer from "./components/footer/Footer";
 import TopHeadlines from "./pages/topheadlines/TopHeadlines";
-import TheNews from "./pages/thenews/TheNews";
+import EveryNews from "./pages/everynews/EveryNews";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { connect } from "react-redux";
 
 const App = ({ user }) => {
   return (
@@ -23,29 +22,19 @@ const App = ({ user }) => {
           element={user ? <Navigate to="/" /> : <SignUp />}
         />
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
-        <Route path="/categories">
-          <Route
-            path=""
-            element={
-              <ProtectedRoute>
-                <Categories />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path=":category"
-            element={
-              <ProtectedRoute>
-                <AllNews />
-              </ProtectedRoute>
-            }
-          ></Route>
-        </Route>
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <Categories />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/news"
           element={
             <ProtectedRoute>
-              <TheNews />
+              <EveryNews />
             </ProtectedRoute>
           }
         />

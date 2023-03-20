@@ -1,13 +1,15 @@
-import axios from "axios";
-import { logError } from "../utils";
-
 export const SET_PREFERENCES = "SET_PREFERENCES";
+export const SET_CATEGORY = "SET_CATEGORY";
 
 export const setPreferences = ({ category, country, language }) => ({
   type: SET_PREFERENCES,
   category,
   country,
   language,
+});
+export const setCategory = ({ category, from }) => ({
+  type: SET_CATEGORY,
+  category,
 });
 
 // export const thunkfetchDataByPreferences =

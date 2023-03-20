@@ -1,11 +1,11 @@
+import React from "react";
+import NewsCard from "./NewsCard";
 import {
   Box,
   Button,
   CircularProgress,
   imageListItemClasses,
 } from "@mui/material";
-import React from "react";
-import NewsCard from "./NewsCard";
 
 const RenderNews = ({ isLoading, newsData, pageSize, handleLoadMore }) => {
   return (
@@ -58,7 +58,7 @@ const RenderNews = ({ isLoading, newsData, pageSize, handleLoadMore }) => {
                 onClick={handleLoadMore}
                 sx={{
                   bgcolor: "black",
-                  width: "20vw",
+                  width: { xs: "30vw", md: "20vw" },
                   color: "white",
                   "&:hover": { backgroundColor: "#FEC20C" },
                 }}
