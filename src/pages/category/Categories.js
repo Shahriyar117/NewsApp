@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Stack,
-  Typography,
   Box,
   imageListItemClasses,
   Paper,
@@ -12,6 +11,7 @@ import {
 import { makeStyles } from "@mui/styles";
 import { Link } from "react-router-dom";
 import "./Categories.css";
+import Header from "../../components/header/Header";
 
 const Categories = () => {
   const categories = [
@@ -41,27 +41,7 @@ const Categories = () => {
   const classes = useStyles();
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "20vh",
-          backgroundColor: "black",
-        }}
-      >
-        <Typography
-          variant="h3"
-          component={"h6"}
-          sx={{
-            fontWeight: 900,
-            textAlign: { xs: "center", sm: "left" },
-            color: "white",
-          }}
-        >
-          Categories
-        </Typography>
-      </Box>
+      <Header title="Categories" />
       <Stack
         className={classes.mediaContainer}
         sx={{

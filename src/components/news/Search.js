@@ -13,7 +13,7 @@ const SearchBox = ({ handleSearchChange }) => {
         "& .MuiOutlinedInput-root": {
           paddingRight: 0,
         },
-        width: { xs: "95vw", md: "50vw" },
+        width: "95%",
       }}
       InputProps={{
         endAdornment: (

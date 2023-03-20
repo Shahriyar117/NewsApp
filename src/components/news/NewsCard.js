@@ -11,6 +11,7 @@ const NewsCard = ({ item }) => {
         component={Link}
         to={`${item.url}`}
         display="flex"
+        target="_blank"
         sx={{
           display: "flex",
           cursor: "pointer",
@@ -25,7 +26,7 @@ const NewsCard = ({ item }) => {
         <Box display="flex" flexDirection="column" sx={{ p: 2 }}>
           <img
             style={{
-              width: "100%",
+              maxWidth: "100%",
               transition: "0.5s ease",
               backfaceVisibility: "hidden",
             }}

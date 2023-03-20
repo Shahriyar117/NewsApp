@@ -45,6 +45,6 @@ export const thunkLogin =
       dispatch(setUser(response.data.data));
       dispatch(setAuthToken(response.data.data._token));
     } catch (error) {
-      logError(error, "auth.actions.thunkSignUp");
+      logError(error, "auth.actions.thunkLogin");
     }
   };
