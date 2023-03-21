@@ -16,8 +16,9 @@ import {
 import { makeStyles } from "@mui/styles";
 import { connect } from "react-redux";
 import TopHeadlineFilter from "../../components/topheadlines/TopHeadlineFilter";
+import { axiosGetRequest } from "../../config/request";
 
-const TopHeadlines = ({ country, language, category }) => {
+const TopHeadlines = ({ country, language, category,authToken }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -25,27 +26,29 @@ const TopHeadlines = ({ country, language, category }) => {
   const [selected, setSelected] = useState(sortByArray[0].value);
   const [toggleSearch, setToggleSearch] = useState("searchCategory");
   const [sources, setSources] = useState([]);
+  const [sourcesData,setSourceData] = useState([]);
   const [search, setSearch] = useState("all");
   const [pageSize, setPageSize] = useState(20);
+
+  useEffect(()=>{
+    const getData =async()=>{ 
+      const sourcesData = await axiosGetRequest(`/news/sources`, authToken)
+        setSourceData(sourcesData.data.data);
+      }
+      getData()
+    },[])
 
   useEffect(() => {
     const fetchData = async () => {
       let getData;
       setIsLoading(true);
       if (toggleSearch === "searchCategory") {
-        getData = await axios.get(
-          `https://newsapi.org/v2/top-headlines?q=${search}&sortBy=${selected}&pageSize=${pageSize}&country=${country}&category=${category}&language=${language}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
-        );
+        getData = await axiosGetRequest(`/news/topHeadlines?country=${country}&category=${category}&language=${language}&keyword=${search}&sortBy=${selected}&pageSize=${pageSize}&page=0`, authToken)
       } else {
-        const allSources = sources.map((x) => x.value);
-        getData = await axios.get(
-          `https://newsapi.org/v2/top-headlines?sources=${allSources.toString()}&q=${search}&sortBy=${selected}&pageSize=${pageSize}&apiKey=${
-            process.env.REACT_APP_NEWS_API_KEY
-          }`
-        );
+        const allSources = sources.map((x) => x.id);
+        getData =  await axiosGetRequest(`/news/topHeadlines?sources=${allSources.toString()}&keyword=${search}&sortBy=${selected}&pageSize=${pageSize}&page=0`, authToken)
       }
-
-      setNewsData(getData.data.articles);
+      setNewsData(getData.data.data);
       setIsLoading(false);
     };
     fetchData();
@@ -101,7 +104,6 @@ const TopHeadlines = ({ country, language, category }) => {
             item
             md={4}
             sx={{
-              height: "60vh",
               display: { xs: "none", sm: "none", md: "grid" },
             }}
           >
@@ -248,10 +250,11 @@ const useStyles = makeStyles({
     backgroundColor: "#ebecf0",
   },
 });
-const msp = ({ preference }) => ({
+const msp = ({ preference,auth }) => ({
   category: preference.category,
   country: preference.country,
   language: preference.language,
+  authToken:auth.authToken
 });
 const mdp = (dispatch) => ({});
 
@@ -266,15 +269,15 @@ const searchBy = [
   { name: "Search By Source", value: "searchSource" },
 ];
 
-const sourcesData = [
-  {
-    id: 1,
-    name: "BBC NEWS",
-    value: "bbc-news",
-  },
-  {
-    id: 2,
-    name: "ABC NEWS",
-    value: "abc-news",
-  },
-];
+// const sourcesData = [
+//   {
+//     id: 1,
+//     name: "BBC NEWS",
+//     value: "bbc-news",
+//   },
+//   {
+//     id: 2,
+//     name: "ABC NEWS",
+//     value: "abc-news",
+//   },
+// ];

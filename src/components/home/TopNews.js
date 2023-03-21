@@ -34,7 +34,7 @@ const TopNews = ({ topNews, about }) => {
           },
         }}
       >
-        {topNews.slice(0, 8).map((news) => (
+        {topNews && topNews.slice(0, 8).map((news) => (
           <NewsCard item={news} />
         ))}
       </Box>

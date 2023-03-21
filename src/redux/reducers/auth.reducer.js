@@ -4,6 +4,7 @@ const preState = {
   user: null,
   authToken: null,
   justLoggedOut: false,
+  error:{}
 };
 
 const authReducer = (state = preState, action) => {

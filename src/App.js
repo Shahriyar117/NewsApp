@@ -10,13 +10,14 @@ import TopHeadlines from "./pages/topheadlines/TopHeadlines";
 import EveryNews from "./pages/everynews/EveryNews";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { connect } from "react-redux";
-
-const App = ({ user }) => {
+import { useEffect } from "react";
+const App = ({ user}) => {
+ 
   return (
     <>
       <NavBar />
       <Routes>
-        <Route index path="/" element={<Home />} />
+        <Route index path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route
           path="/signup"
           element={user ? <Navigate to="/" /> : <SignUp />}
@@ -47,14 +48,15 @@ const App = ({ user }) => {
           }
         />
       </Routes>
-      {user ? <UserFooter /> : <Footer />}
+      {user && <UserFooter /> }
     </>
   );
 };
 const msp = ({ auth }) => ({
   user: auth.user,
 });
-const mdp = (dispatch) => ({});
+const mdp = (dispatch) => ({
+});
 
 export default connect(msp, mdp)(App);
 
