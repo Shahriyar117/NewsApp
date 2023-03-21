@@ -32,8 +32,8 @@ const TopHeadlines = ({ country, language, category,authToken }) => {
 
   useEffect(()=>{
     const getData =async()=>{ 
-      const sourcesData = await axiosGetRequest(`/news/sources`, authToken)
-        setSourceData(sourcesData.data.data);
+      const sourcesDataNews = await axiosGetRequest(`/news/sources`, authToken)
+        setSourceData(sourcesDataNews.data.data);
       }
       getData()
     },[])
@@ -104,7 +104,7 @@ const TopHeadlines = ({ country, language, category,authToken }) => {
             item
             md={4}
             sx={{
-              display: { xs: "none", sm: "none", md: "grid" },
+              display: { xs: "none", sm: "none", md: "grid" },height:"50vh"
             }}
           >
             {" "}
@@ -112,8 +112,7 @@ const TopHeadlines = ({ country, language, category,authToken }) => {
               elevation={3}
               sx={{
                 bgcolor: "white",
-                m: 2,
-                height: "50vh",
+                mr: 2,
               }}
             >
               <Box
@@ -214,7 +213,7 @@ const TopHeadlines = ({ country, language, category,authToken }) => {
                 alignItems: "center",
                 height: { xs: "5vh", md: "10vh" },
                 backgroundColor: "black",
-                width: "95%",
+                
               }}
             >
               <Typography
@@ -225,7 +224,7 @@ const TopHeadlines = ({ country, language, category,authToken }) => {
                   color: "white",
                 }}
               >
-                {category ? `${category} news` : "news"}
+                {toggleSearch === "searchCategory" ? `${category} news` : "news"}
               </Typography>
             </Box>
 
