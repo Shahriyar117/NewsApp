@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -10,13 +10,13 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { setModalOpen, thunkLogin } from "../../redux/actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { resetError } from "../../redux/actions/error.action";
 
-const Login = ({ loginUser, setModalOpen }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+const Login = ({ loginUser, setModalOpen,error,isError,resetError }) => {
+  
+  useEffect(()=>{
+    resetError()
+  },[])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -61,6 +61,7 @@ const Login = ({ loginUser, setModalOpen }) => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                error = {isError && (error.email)}
                   required
                   fullWidth
                   id="email"
@@ -70,30 +71,24 @@ const Login = ({ loginUser, setModalOpen }) => {
                   autoComplete="email"
                 />
               </Grid>
+              <Box sx={{margin:"2px", padding:"2px", color: "red"}}>
+              {error.email}
+             </Box>
               <Grid item xs={12}>
                 <TextField
+                error = {isError && (error.password)}
                   required
                   fullWidth
                   name="password"
                   label="Password"
-                  type={showPassword ? "text" : "password"}
+                  type= "password"
                   id="password"
                   autoComplete="new-password"
-                  inputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
                 />
               </Grid>
+              <Box sx={{margin:"2px", padding:"2px", color: "red"}}>
+              {error.password}
+            </Box>
             </Grid>
             <Button
               type="submit"
@@ -144,12 +139,17 @@ const Login = ({ loginUser, setModalOpen }) => {
     </>
   );
 };
-const msp = () => ({});
+const msp = ({error}) => ({
+  error: error.error,
+  isError: error.isError,
+});
 
 const mdp = (dispatch) => ({
   loginUser: (email, password, from) =>
     dispatch(thunkLogin(email, password, from)),
   setModalOpen: () => dispatch(setModalOpen()),
+  resetError: () =>
+    dispatch(resetError()),
 });
 
 export default connect(msp, mdp)(Login);

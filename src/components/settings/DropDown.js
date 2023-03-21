@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FormControl,
   InputLabel,
@@ -7,11 +7,12 @@ import {
   Select,
 } from "@mui/material";
 
-const DropDown = ({ title, selected, handleSelected, data }) => {
+const DropDown = ({ title, selected, handleSelected,data }) => {
   const handleChange = (event) => {
     const { value } = event.target;
     handleSelected(value);
   };
+  
   return (
     <FormControl sx={{ width: "100%", mb: 2, ml: 1 }}>
       <InputLabel id="country-checkbox-label">{title}</InputLabel>
@@ -22,18 +23,21 @@ const DropDown = ({ title, selected, handleSelected, data }) => {
         size="medium"
         onChange={handleChange}
       >
-        {data.map((list) => (
+    {data && data.map((list) => (
           <MenuItem
-            key={list.name}
-            value={list.value}
+            key={list.key}
+            value={list.key}
             sx={{ fontSize: "14px" }}
           >
-            {list.name}
+            {list.value}
           </MenuItem>
         ))}
+       
       </Select>
     </FormControl>
   );
 };
+
+
 
 export default DropDown;

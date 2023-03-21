@@ -6,6 +6,7 @@ import { makeStyles } from "@mui/styles";
 import RenderNews from "../../components/news/RenderNews";
 import Header from "../../components/header/Header";
 import { connect } from "react-redux";
+import { axiosGetRequest } from "../../config/request";
 
 const sortByArray = [
   { name: "Recent First", value: "publishedAt" },
@@ -29,7 +30,7 @@ const sourcesData = [
   },
 ];
 
-const EveryNews = ({ country, language, category }) => {
+const EveryNews = ({ country, language, category,authToken }) => {
   const classes = useStyles();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -41,11 +42,8 @@ const EveryNews = ({ country, language, category }) => {
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const getData = await axios.get(
-        `https://newsapi.org/v2/everything?q=${search}&sortBy=${selected}&pageSize=${pageSize}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
-      );
-
-      setNewsData(getData.data.articles);
+      const allNewsData =  await axiosGetRequest(`/news/everything?keyword=${search}&sortBy=${selected}&pageSize=${pageSize}&page=1`, authToken)
+      setNewsData(allNewsData.data.data);
       setIsLoading(false);
     };
     fetchData();
@@ -140,7 +138,9 @@ const useStyles = makeStyles({
     backgroundColor: "#ebecf0",
   },
 });
-const msp = ({}) => ({});
+const msp = ({auth}) => ({
+  authToken:auth.authToken
+});
 const mdp = (dispatch) => ({});
 
 export default connect(msp, mdp)(EveryNews);

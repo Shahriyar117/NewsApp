@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -9,16 +9,19 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { thunkSignUp } from "../../redux/actions";
 import { connect } from "react-redux";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { resetError } from "../../redux/actions/error.action";
 
-const SignUp = ({ registerUser }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+const SignUp = ({ registerUser, error, isError,resetError }) => {
+ 
+  useEffect(()=>{
+    resetError()
+  },[])
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -26,9 +29,11 @@ const SignUp = ({ registerUser }) => {
       name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
+      password_confirmation: data.get("confirmPassword"),
     };
     console.log(userRegister);
     registerUser({ ...userRegister, from: "handleSubmit-SignUp" });
+    
   };
 
   return (
@@ -62,6 +67,7 @@ const SignUp = ({ registerUser }) => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error = {isError && error.name}
                 autoComplete="given-name"
                 name="name"
                 required
@@ -71,8 +77,12 @@ const SignUp = ({ registerUser }) => {
                 autoFocus
               />
             </Grid>
+            <Box sx={{margin:"2px", padding:"2px", color: "red"}}>
+              {error.name}
+            </Box>
             <Grid item xs={12}>
               <TextField
+                error = {isError && error.email}
                 required
                 fullWidth
                 id="email"
@@ -82,31 +92,41 @@ const SignUp = ({ registerUser }) => {
                 autoComplete="email"
               />
             </Grid>
+            <Box sx={{margin:"2px", padding:"2px", color: "red"}}>
+              {error.email}
+            </Box>
             <Grid item xs={12}>
               <TextField
+               error = {isError && (error.password || error.password_confirmation)}
                 required
                 fullWidth
                 name="password"
                 label="Password"
-                type={showPassword ? "text" : "password"}
+                type="password"
                 id="password"
-                autoComplete="new-password"
-                inputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  minLength: 6,
+                inputProps={{   
+                  minLength: 8,
                 }}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                error = {isError && (error.password || error.password_confirmation)}
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                inputProps={{
+                  minLength: 8,
+                }}
+              />
+            </Grid>
+            <Box sx={{margin:"2px", padding:"2px", color: "red"}}>
+              {isError && error.password.map((i )=>(
+                <Box>{i}</Box>))}
+            </Box>
             <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" />}
@@ -149,13 +169,17 @@ const SignUp = ({ registerUser }) => {
   );
 };
 
-const msp = ({ auth }) => ({
+const msp = ({ auth, error }) => ({
   user: auth.user,
+  error: error.error,
+  isError: error.isError,
 });
 
 const mdp = (dispatch) => ({
   registerUser: (name, email, password, from) =>
     dispatch(thunkSignUp(name, email, password, from)),
+  resetError: () =>
+    dispatch(resetError()),
 });
 
 export default connect(msp, mdp)(SignUp);

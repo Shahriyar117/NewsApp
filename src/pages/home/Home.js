@@ -4,24 +4,29 @@ import TopNews from "../../components/home/TopNews";
 import SettingsDialog from "../../components/settings/Settings";
 import { Stack, Box, CircularProgress } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { setAllPreferences, setError, thunkFetchPreferences } from "../../redux/actions";
+import { connect } from "react-redux";
+import {axiosGetRequest} from "../../config/request"
 
-const Home = () => {
+const Home = ({authToken,setAllPreferences,setError,country,category}) => {
   const classes = useStyles();
   const [isLoading, setIsLoading] = useState(true);
-  const [topNewsSource, setTopNewsSource] = useState();
-  const [topNewsCountry, setTopNewsCountry] = useState();
+  const [topNews, setTopNews] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
-      const getDataCountry = await axios.get(
-        `https://newsapi.org/v2/top-headlines?country=${process.env.REACT_APP_TOP_NEWS_COUNTRY}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
-      );
-      setTopNewsCountry(getDataCountry.data.articles);
-      const getDataSource = await axios.get(
-        `https://newsapi.org/v2/top-headlines?sources=${process.env.REACT_APP_TOP_NEWS_SOURCE}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
-      );
-      setTopNewsSource(getDataSource.data.articles);
+      if(authToken !== null){
+        const response = await axiosGetRequest('/news/preferences', authToken)
+      if(response.data.status==="success"){
+        const {categories,countries,languages} = response.data.data
+        setAllPreferences({categories,countries,languages})
+      }else if(response.data.status==="error"){
+        setError(response.data.errors)
+      }
+      }
+      const getData = await axiosGetRequest(`/news/topHeadlines?country=${country}&category=${category}&keyword=&pageSize=20&page=0`, authToken)
+        setTopNews(getData.data.data.news);
       setIsLoading(false);
     };
     fetchData();
@@ -54,13 +59,9 @@ const Home = () => {
           </Box>
         ) : (
           <>
-            <TopNews
-              topNews={topNewsCountry}
+             <TopNews
+              topNews={topNews}
               about={process.env.REACT_APP_TOP_NEWS_COUNTRY}
-            />
-            <TopNews
-              topNews={topNewsSource}
-              about={process.env.REACT_APP_TOP_NEWS_SOURCE}
             />
           </>
         )}
@@ -78,4 +79,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default Home;
+const msp = ({auth,preference}) => ({
+  authToken:auth.authToken,
+  country: preference.country,
+  category:preference.category
+});
+const mdp = (dispatch) => ({
+  setAllPreferences:({categories,countries,languages})=>
+    dispatch(setAllPreferences({categories,countries,languages})),
+  setError: () =>
+    dispatch(setError())
+ 
+});
+
+export default connect(msp, mdp)(Home);

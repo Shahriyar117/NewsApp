@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SearchBox from "../news/Search";
 import DropDownCheckbox from "../settings/DropDownCheckbox";
 import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";

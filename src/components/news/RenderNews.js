@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 
 const RenderNews = ({ isLoading, newsData, pageSize, handleLoadMore }) => {
+  
   return (
     <>
       {isLoading ? (
@@ -41,11 +42,11 @@ const RenderNews = ({ isLoading, newsData, pageSize, handleLoadMore }) => {
               },
             }}
           >
-            {newsData.map((news) => (
+            {newsData && newsData.news.map((news) => (
               <NewsCard item={news} />
             ))}
           </Box>
-          {pageSize <= 99 && (
+          {newsData && pageSize <= newsData.totalResults && (
             <Box
               sx={{
                 mt: 3,

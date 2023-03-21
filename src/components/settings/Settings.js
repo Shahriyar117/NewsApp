@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DropDown from "./DropDown";
@@ -8,6 +8,10 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Grid, Slide } from "@mui/material";
 import { connect } from "react-redux";
 import { setModalClose, setPreferences } from "../../redux/actions";
+import { setAllPreferences, setError, } from "../../redux/actions";
+import {axiosPutRequest} from "../../config/request"
+// import { response } from "express";
+// import { thunkFetchPreferences } from "../../redux/actions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -82,12 +86,17 @@ const SettingsDialog = ({
   open,
   country,
   language,
+  category,
   setModalClose,
+  categories,
+  languages,
+  countries,
+  authToken
 }) => {
   const [sources, setSources] = useState([]);
   const [countrySelected, setCountrySelected] = useState(country);
   const [languageSelected, setLanguageSelected] = useState(language);
-  const [categorySelected, setCategorySelected] = useState(language);
+  const [categorySelected, setCategorySelected] = useState(category);
 
   const handleSetSources = (value) => {
     setSources(value);
@@ -105,13 +114,14 @@ const SettingsDialog = ({
     setCategorySelected(value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-
+    console.log(authToken)
+    const response = await axiosPutRequest(`/profile?category=${categorySelected}&language=${languageSelected}&country=${countrySelected}`, authToken);
     const userPreferences = {
-      category: categorySelected,
-      country: countrySelected,
-      language: languageSelected,
+      category: response.data.data.category,
+      country: response.data.data.country,
+      language: response.data.data.language,
     };
     console.log(userPreferences);
     setPreference(userPreferences);
@@ -142,21 +152,21 @@ const SettingsDialog = ({
           >
             <Box sx={{ width: "90%" }}>
               <DropDown
+                data={countries}
                 title={"Country"}
                 selected={countrySelected}
-                data={countriesData}
                 handleSelected={handleSetCountry}
               />
               <DropDown
+                data={languages}
                 title={"Language"}
                 selected={languageSelected}
-                data={languageData}
                 handleSelected={handleSetLanguage}
               />
               <DropDown
+                data={categories}
                 title={"Category"}
                 selected={categorySelected}
-                data={categoriesData}
                 handleSelected={handleSetCategory}
               />
             </Box>
@@ -189,16 +199,22 @@ const SettingsDialog = ({
     </Dialog>
   );
 };
-const msp = ({ preference, modal }) => ({
+const msp = ({ preference, modal,auth }) => ({
   category: preference.category,
   country: preference.country,
   language: preference.language,
+  categories: preference.categories,
+  countries: preference.countries,
+  languages: preference.languages,
   open: modal.open,
+  authToken:auth.authToken
 });
 const mdp = (dispatch) => ({
   setPreference: (category, country, language) =>
     dispatch(setPreferences(category, country, language)),
   setModalClose: () => dispatch(setModalClose()),
+  setError: () =>
+    dispatch(setError())
 });
 
 export default connect(msp, mdp)(SettingsDialog);
